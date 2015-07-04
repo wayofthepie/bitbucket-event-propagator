@@ -16,9 +16,19 @@ class AdminServlet(val userManager: UserManager,
   extends HttpServlet {
 
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse): Unit = {
-    val userProfile: UserProfile = userManager.getRemoteUser(req)
-    val username: String = userProfile.getUsername
-    if(username == null || ! userManager.isSystemAdmin(userProfile.getUserKey))
+    val userProfile: Option[UserProfile] = Option(userManager.getRemoteUser(req))
+    val username: Option[String] = userProfile.map(up => up.getUsername)
+
+    // Repetition....
+    def isSysAdmin(userProfile: Option[UserProfile],
+                    userManager: UserManager): Boolean = {
+      userProfile.map(up => up.getUserKey) match {
+        case Some(userKey) => userManager.isSystemAdmin(userKey)
+        case None          => false
+      }
+    }
+
+    if(username == null || ! isSysAdmin(userProfile,userManager))
       redirectToLogin(req,resp)
     else
       resp.setContentType("text/html;charset=utf-8");
