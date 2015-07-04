@@ -28,9 +28,10 @@ class ConfigResource(val userManager: UserManager,
   def get(request: HttpServletRequest): Response = {
     val userProfile: Option[UserProfile] = Option(userManager.getRemoteUser(request))
     val username: Option[String] = userProfile.map(up => up.getUsername)
-    val isSysAdmin: Boolean = userProfile.map(up => userManager.isSystemAdmin(up.getUserKey)) match {
-      case Some(b) => b
-      case None    => false
+    val isSysAdmin: Boolean =
+      userProfile.map(up => userManager.isSystemAdmin(up.getUserKey)) match {
+        case Some(b) => b
+        case None    => false
     }
 
     if(username == None || ! isSysAdmin)

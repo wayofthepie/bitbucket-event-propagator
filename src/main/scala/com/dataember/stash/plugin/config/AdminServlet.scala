@@ -19,13 +19,10 @@ class AdminServlet(val userManager: UserManager,
     val userProfile: Option[UserProfile] = Option(userManager.getRemoteUser(req))
     val username: Option[String] = userProfile.map(up => up.getUsername)
 
-    // Repetition....
-    def isSysAdmin(userProfile: Option[UserProfile],
-                    userManager: UserManager): Boolean = {
-      userProfile.map(up => up.getUserKey) match {
-        case Some(userKey) => userManager.isSystemAdmin(userKey)
-        case None          => false
-      }
+    def isSysAdmin: Boolean =
+      userProfile.map(up => userManager.isSystemAdmin(up.getUserKey)) match {
+        case Some(b) => b
+        case None    => false
     }
 
     if(username == null || ! isSysAdmin(userProfile,userManager))
