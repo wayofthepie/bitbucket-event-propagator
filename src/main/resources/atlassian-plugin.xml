@@ -1,0 +1,33 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="conf-notif"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="conf-notif-resources" name="conf-notif Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="conf-notif.css" location="/css/conf-notif.css"/>
+        <resource type="download" name="conf-notif.js" location="/js/conf-notif.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>conf-notif</context>
+    </web-resource>
+    
+    <!-- publish our component -->
+    <component key="myPluginComponent" class="com.dataember.stash.plugin.MyPluginComponentImpl" public="true">
+        <interface>com.dataember.stash.plugin.MyPluginComponent</interface>
+    </component>
+    <!-- create repo event listener -->
+    <component key="RepoCreateEventListener" class="com.dataember.stash.plugin.RepoCreateEventListener" />
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+    
+</atlassian-plugin>
