@@ -20,6 +20,14 @@
 
         <context>conf-notif</context>
     </web-resource>
+
+    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
+    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+    <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+
+    <servlet key="admin-servlet" class="com.dataember.stash.plugin.config.AdminServlet">
+        <url-pattern>/eventpropagator/admin</url-pattern>
+    </servlet>
     
     <!-- publish our component -->
     <component key="myPluginComponent" class="com.dataember.stash.plugin.MyPluginComponentImpl" public="true">
