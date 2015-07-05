@@ -6,7 +6,7 @@
     </plugin-info>
 
     <!-- from our base plugin -->
-    <component-import key="myComponent" interface="com.dataember.stash.plugin.MyPluginComponent"/>
+    <component-import key="RepoCreateEventListener" interface="com.dataember.stash.plugin.RepoCreateEventListener"/>
 
     <!-- from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />

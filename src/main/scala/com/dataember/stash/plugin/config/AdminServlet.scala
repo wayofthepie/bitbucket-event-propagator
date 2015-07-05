@@ -25,7 +25,7 @@ class AdminServlet(val userManager: UserManager,
         case None    => false
     }
 
-    if(username == None || ! isSysAdmin(userProfile,userManager))
+    if(username == None || ! isSysAdmin)
       redirectToLogin(req,resp)
     else
       resp.setContentType("text/html;charset=utf-8");

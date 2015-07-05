@@ -1,8 +1,9 @@
 <html>
   <head>
-    <title>XProduct Admin</title>
+    <title>Event Propagator Configuration</title>
     <meta name="decorator" content="atl.admin">
     $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+    $webResourceManager.requireResourcesForContext("com.dataember.stash.plugin.event.propagator.admin")
   </head>
   <body>
     <form id="admin" class="aui">

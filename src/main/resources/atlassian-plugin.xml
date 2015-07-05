@@ -8,39 +8,38 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="conf-notif"/>
+    <resource type="i18n" name="i18n" location="event-propagator"/>
     
     <!-- add our web resources -->
-    <web-resource key="conf-notif-resources" name="conf-notif Web Resources">
+    <web-resource key="event-propagator-resources" name="event-propagator Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         
-        <resource type="download" name="conf-notif.css" location="/css/conf-notif.css"/>
-        <resource type="download" name="conf-notif.js" location="/js/conf-notif.js"/>
+        <resource type="download" name="event-propagator.css" location="/css/event-propagator.css"/>
+        <resource type="download" name="event-propagator-admin.js" location="/js/event-propagator-admin.js"/>
         <resource type="download" name="images/" location="/images"/>
 
-        <context>conf-notif</context>
+        <context>com.dataember.stash.plugin.event.propagator.admin</context>
     </web-resource>
 
     <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
     <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
     <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+    <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+    <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate" />
+
 
     <servlet key="admin-servlet" class="com.dataember.stash.plugin.config.AdminServlet">
-        <url-pattern>/eventpropagator/admin</url-pattern>
+        <url-pattern>/event-propagator/admin</url-pattern>
     </servlet>
-    
-    <!-- publish our component -->
-    <component key="myPluginComponent" class="com.dataember.stash.plugin.MyPluginComponentImpl" public="true">
-        <interface>com.dataember.stash.plugin.MyPluginComponent</interface>
-    </component>
+
     <!-- create repo event listener -->
     <component key="RepoCreateEventListener" class="com.dataember.stash.plugin.RepoCreateEventListener" />
     <!-- import from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
 
-    <!-- UI for Admin Configuration -->
-    <web-resource name="Admin Web Resources" key="resources">
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-        <resource type="download" name="admin.js" location="admin.js"/>
-    </web-resource>
+    <rest key="rest" path="/event-propagator" version="1.0">
+        <description>Provides REST resources for the admin UI.</description>
+    </rest>
+
+
 </atlassian-plugin>
