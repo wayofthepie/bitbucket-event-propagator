@@ -8,7 +8,7 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="resources/i18n" />
+    <resource type="i18n" name="i18n" location="i18n/event-propagator" />
 
     <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
     <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
@@ -53,7 +53,8 @@
     </web-item>
     <!-- End Admin config interface -->
 
-    <repository-hook key="examplehook" name="Webhook" class="com.dataember.stash.plugin.hook.MyRepositoryHook">
+    <!-- Repo hook config -->
+    <repository-hook key="examplehook" name="Event Propagator" class="com.dataember.stash.plugin.hook.MyRepositoryHook">
         <description>Webhook for notifying a configured endpoint of changes to this repository.</description>
         <icon>icons/example.png</icon>
         <config-form name="Simple Hook Config" key="simpleHook-config">
@@ -61,4 +62,5 @@
             <directory location="/static/"/>
         </config-form>
     </repository-hook>
+    <!-- End Repo hook config -->
 </atlassian-plugin>

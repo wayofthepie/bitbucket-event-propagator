@@ -28,26 +28,44 @@ class ConfigResource(val userManager: UserManager,
                       val pluginSettingsFactory: PluginSettingsFactory,
                       val transactionTemplate: TransactionTemplate) {
 
-  val opts: Properties = new Properties()
-  val conn = Conn.connect(opts)
+
+  val NATS_SERVERS_KEY = "servers"
+
+  implicit val conn: Conn = initialConfig()
 
   def errorHandler(e:Exception) = Response.serverError().entity(e.getLocalizedMessage).build()
   def success[A](entity:Config):Response = Response.ok(entity).build()
 
+  def initialConfig(): Conn = {
+    val pluginSettings : PluginSettings = pluginSettingsFactory.createGlobalSettings()
+    pluginSettings.put(NATS_SERVERS_KEY, "nats://192.168.1.4:4222")
+
+    val opts : Properties = new Properties
+
+    val maybeServers: Option[String] = Option(pluginSettings.get(NATS_SERVERS_KEY).toString)
+
+    val tconn = maybeServers filterNot(_.isEmpty) map (s => {
+      opts.put(NATS_SERVERS_KEY,s)
+      Conn.connect(opts)
+    }) getOrElse Conn.connect(new Properties())
+    tconn.publish("test", "initialConfig")
+    return tconn
+  }
+
   @GET
   @Path(value = "test")
   @Produces(Array(MediaType.APPLICATION_JSON))
-  def test(): Response = {
+  def test(implicit conn: Conn): Response = {
     val config = new Config
-    config.name = "test"
+    config.servers = "test"
     config.time = ""
-
+    conn.publish("test", "test")
     success(config)
   }
 
   @GET
   @Produces(Array(MediaType.APPLICATION_JSON))
-  def get(): Response = {
+  def  get(): Response = {
 
       success(transactionTemplate.execute(new TransactionCallback[Config] {
         override def doInTransaction(): Config = {
@@ -61,16 +79,13 @@ class ConfigResource(val userManager: UserManager,
           val time: Option[String] =
             Option(settings.get(classOf[Config].getName + ".time").asInstanceOf[String])
 
-          config.name = name match {
-            case None    => ""
-            case Some(x) => x
-          }
+
 
           config.time = time match {
             case None    => "0"
             case Some(t) => t
           }
-          conn.publish("test", "retrieved name " + config.name + " retrieved " + config.time)
+          conn.publish("test", "retrieved name " + " retrieved " + config.time)
           config
         }
       }))
@@ -82,11 +97,11 @@ class ConfigResource(val userManager: UserManager,
     transactionTemplate.execute(new TransactionCallback[Unit] {
       override def doInTransaction(): Unit= {
         val pluginSettings: PluginSettings = pluginSettingsFactory.createGlobalSettings()
-        pluginSettings.put(classOf[Config].getName + ".name", config.name)
+
         pluginSettings.put(classOf[Config].getName + ".time", config.time)
       }
     })
-    conn.publish("test", "updated settings " + config.name + "  : " + config.time)
+    conn.publish("test", "updated settings "  + "  : " + config.time)
 
     Response.noContent().build()
   }
@@ -95,7 +110,7 @@ class ConfigResource(val userManager: UserManager,
 @XmlRootElement
 class Config {
   @XmlElement
-  var name = ""
+  var servers = "nats://192.168.1.4:4222"
 
   @XmlElement
   var time = ""
