@@ -27,10 +27,22 @@
 
         <context>com.dataember.stash.plugin.event.propagator.admin</context>
     </web-resource>
+
     <!-- Admin config interface for plugin -->
     <servlet key="admin-servlet" class="com.dataember.stash.plugin.config.AdminServlet">
         <url-pattern>/event-propagator/admin</url-pattern>
     </servlet>
+
+    <!-- http://bitbucketurl/rest/event-ptopagator/latest/projects/TEST/repos/test/test -->
+    <rest key="event-propagator" path="/event-propagator" version="1.0">
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <init-param>
+            <param-name>extension.filter.excludes</param-name>
+            <param-value>.*</param-value>
+        </init-param>
+        <package>com.dataember.stash.plugin.config.ui</package>
+    </rest>
 
     <web-item key="event-propagator_config" name="Event Propagator Config"
               section="atl.admin/admin-settings-section">

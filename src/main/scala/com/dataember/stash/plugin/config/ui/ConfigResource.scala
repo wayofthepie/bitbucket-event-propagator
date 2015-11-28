@@ -8,6 +8,8 @@ import javax.ws.rs.core.Response.Status
 import javax.ws.rs._
 import javax.xml.bind.annotation.{XmlElement, XmlRootElement}
 
+import com.atlassian.bitbucket.rest.util.{RestUtils, ResourcePatterns}
+import com.atlassian.plugins.rest.common.security.AnonymousAllowed
 import com.atlassian.sal.api.pluginsettings.{PluginSettings, PluginSettingsFactory}
 import com.atlassian.sal.api.transaction.{TransactionCallback, TransactionTemplate}
 import com.atlassian.sal.api.user.{UserProfile, UserManager}
@@ -16,9 +18,12 @@ import org.nats.Conn
 import scala.collection.JavaConverters._
 
 /**
- * Created by chaospie on 04/07/15.
+ *
  */
 @Path("/")
+@Consumes(Array({MediaType.APPLICATION_JSON}))
+@Produces(Array({RestUtils.APPLICATION_JSON_UTF8}))
+@AnonymousAllowed
 class ConfigResource(val userManager: UserManager,
                       val pluginSettingsFactory: PluginSettingsFactory,
                       val transactionTemplate: TransactionTemplate) {
@@ -30,7 +35,7 @@ class ConfigResource(val userManager: UserManager,
   def success[A](entity:Config):Response = Response.ok(entity).build()
 
   @GET
-  @Path("test")
+  @Path(value = "test")
   @Produces(Array(MediaType.APPLICATION_JSON))
   def test(): Response = {
     val config = new Config
@@ -43,13 +48,6 @@ class ConfigResource(val userManager: UserManager,
   @GET
   @Produces(Array(MediaType.APPLICATION_JSON))
   def get(): Response = {
-/*    val userProfile: Option[UserProfile] = Option(userManager.getRemoteUser(request))
-    val username: Option[String] = userProfile.map(up => up.getUsername)
-    val isSysAdmin: Boolean =
-      userProfile.map(up => userManager.isSystemAdmin(up.getUserKey)) match {
-        case Some(b) => b
-        case None    => false
-    }*/
 
       success(transactionTemplate.execute(new TransactionCallback[Config] {
         override def doInTransaction(): Config = {

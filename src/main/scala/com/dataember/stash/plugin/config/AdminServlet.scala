@@ -8,7 +8,7 @@ import com.atlassian.sal.api.user.{UserProfile, UserManager}
 import com.atlassian.templaterenderer.TemplateRenderer
 
 /**
- * Created by chaospie on 04/07/15.
+ * Created on 04/07/15.
  */
 class AdminServlet(val userManager: UserManager,
                    val loginUriProvider: LoginUriProvider,
