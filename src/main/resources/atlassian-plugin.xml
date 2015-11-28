@@ -32,7 +32,9 @@
         <url-pattern>/event-propagator/admin</url-pattern>
     </servlet>
 
-    <web-item key="event-propagator_config" name="Event Propagator Config" section="atl.admin/admin-settings-section" weight="10">
+    <web-item key="event-propagator_config" name="Event Propagator Config"
+              section="atl.admin/admin-settings-section">
+
         <description>Configuration for the Event Propagator</description>
         <label>Event Propagator Configuration</label>
         <link linkId="event-propagator-config">/plugins/servlet/event-propagator/admin</link>
