@@ -14,6 +14,7 @@ import com.atlassian.sal.api.pluginsettings.{PluginSettings, PluginSettingsFacto
 import com.atlassian.sal.api.transaction.{TransactionCallback, TransactionTemplate}
 import com.atlassian.sal.api.user.{UserProfile, UserManager}
 import org.nats.Conn
+import org.springframework.beans.factory.annotation.Autowired
 
 import scala.collection.JavaConverters._
 
@@ -31,26 +32,14 @@ class ConfigResource(val userManager: UserManager,
 
   val NATS_SERVERS_KEY = "servers"
 
-  implicit val conn: Conn = initialConfig()
+  /* TODO : There must be a better way to do this, without resorting to spring... */
+  @Autowired
+  implicit var conn : Conn = null
 
   def errorHandler(e:Exception) = Response.serverError().entity(e.getLocalizedMessage).build()
   def success[A](entity:Config):Response = Response.ok(entity).build()
 
-  def initialConfig(): Conn = {
-    val pluginSettings : PluginSettings = pluginSettingsFactory.createGlobalSettings()
-    pluginSettings.put(NATS_SERVERS_KEY, "nats://192.168.1.4:4222")
 
-    val opts : Properties = new Properties
-
-    val maybeServers: Option[String] = Option(pluginSettings.get(NATS_SERVERS_KEY).toString)
-
-    val tconn = maybeServers filterNot(_.isEmpty) map (s => {
-      opts.put(NATS_SERVERS_KEY,s)
-      Conn.connect(opts)
-    }) getOrElse Conn.connect(new Properties())
-    tconn.publish("test", "initialConfig")
-    return tconn
-  }
 
   @GET
   @Path(value = "test")

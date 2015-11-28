@@ -10,6 +10,13 @@
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="i18n/event-propagator" />
 
+
+    <component key="natsMessagingService" class="com.dataember.stash.plugin.msg.NatsMessagingService" public="true">
+        <description>Provides messaging functionality over nats.</description>
+        <interface>com.dataember.stash.plugin.msg.MessagingService</interface>
+    </component>
+
+    <!--<component-import key="messagingService" interface="com.dataember.stash.plugin.msg.MessagingService" />-->
     <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
     <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
     <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
