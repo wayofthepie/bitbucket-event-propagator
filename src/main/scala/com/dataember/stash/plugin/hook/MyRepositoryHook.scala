@@ -2,7 +2,8 @@ package com.dataember.stash.plugin.hook
 
 import java.util
 
-import com.atlassian.bitbucket.hook.repository.{RepositoryHookContext, AsyncPostReceiveRepositoryHook}
+import com.atlassian.bitbucket.hook.HookResponse
+import com.atlassian.bitbucket.hook.repository.{PreReceiveRepositoryHook, RepositoryHookContext, AsyncPostReceiveRepositoryHook}
 import com.atlassian.bitbucket.repository.{RefChange, Repository}
 import com.atlassian.bitbucket.setting.{Settings, SettingsValidationErrors, RepositorySettingsValidator}
 
@@ -11,7 +12,7 @@ import scalaj.http.Http
 /**
   * Created by chaospie on 28/11/15.
   */
-object MyRepositoryHook extends AsyncPostReceiveRepositoryHook with RepositorySettingsValidator {
+class MyRepositoryHook extends  AsyncPostReceiveRepositoryHook with RepositorySettingsValidator {
 
 
 
@@ -30,6 +31,5 @@ object MyRepositoryHook extends AsyncPostReceiveRepositoryHook with RepositorySe
       .filterNot(_.isEmpty) map(s => Http("http://foo.com/add")
         .postForm(Seq("name" -> "jon", "age" -> "29")).asString)
   }
-
 
 }

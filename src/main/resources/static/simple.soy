@@ -1,4 +1,4 @@
-{namespace stash.config.example.hook.simple}
+{namespace bitbucket.config.example.hook.simple}
 
 /**
  * @param config
@@ -8,10 +8,8 @@
     {call aui.form.textField}
         {param id: 'url' /}
         {param value: $config['url'] /}
-        {param labelContent}
-            {stash_i18n('stash.web.test.hook.config.label', 'URL')}
-        {/param}
-        {param descriptionText: stash_i18n('stash.web.test.hook.config.description', 'A URL to be notified') /}
+        {param labelContent: getText('bitbucket.web.test.hook.config.label') /}
+        {param descriptionText: getText('bitbucket.web.test.hook.config.description') /}
         {param extraClasses: 'long' /}
         {param errorTexts: $errors ? $errors['url'] : null /}
     {/call}
