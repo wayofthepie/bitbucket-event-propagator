@@ -21,9 +21,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.atlassian.stash</groupId>
-                <artifactId>stash-parent</artifactId>
-                <version>${stash.version}</version>
+                <groupId>com.atlassian.bitbucket.server</groupId>
+                <artifactId>bitbucket-parent</artifactId>
+                <version>${bitbucket.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -37,23 +37,23 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.stash</groupId>
-            <artifactId>stash-api</artifactId>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.stash</groupId>
-            <artifactId>stash-spi</artifactId>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-spi</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.stash</groupId>
-            <artifactId>stash-page-objects</artifactId>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-page-objects</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -66,6 +66,11 @@
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-core_2.11</artifactId>
             <version>7.2.0-M2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaj</groupId>
+            <artifactId>scalaj-http_2.11</artifactId>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.tyagihas</groupId>
@@ -147,8 +152,8 @@
                         <product>
                             <id>stash</id>
                             <instanceId>stash</instanceId>
-                            <version>${stash.version}</version>
-                            <dataVersion>${stash.data.version}</dataVersion>
+                            <version>${bitbucket.version}</version>
+                            <dataVersion>${bitbucket.data.version}</dataVersion>
                             <systemPropertyVariables>
                                 <!-- Force Stash to start up synchronously -->
                                 <johnson.spring.lifecycle.synchronousStartup>true</johnson.spring.lifecycle.synchronousStartup>
@@ -202,8 +207,8 @@
     </build>
     
     <properties>
-        <stash.version>3.10.2</stash.version>
-        <stash.data.version>3.10.2</stash.data.version>
+        <bitbucket.version>4.1.0</bitbucket.version>
+        <bitbucket.data.version>4.1.0</bitbucket.data.version>
         <amps.version>5.0.16</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <scala.version>2.11.7</scala.version>

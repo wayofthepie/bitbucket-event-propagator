@@ -2,9 +2,9 @@ package com.dataember.stash.plugin
 
 import java.util.Properties
 
+import com.atlassian.bitbucket.event.repository.RepositoryCreatedEvent
+import com.atlassian.bitbucket.project.ProjectService
 import com.atlassian.event.api.{EventListener, AsynchronousPreferred}
-import com.atlassian.stash.event.RepositoryCreatedEvent
-import com.atlassian.stash.project.ProjectService
 import org.nats._
 import scalaz.Reader
 

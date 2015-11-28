@@ -41,5 +41,12 @@
         <description>Provides REST resources for the admin UI.</description>
     </rest>
 
-
+    <repository-hook key="examplehook" name="Webhook" class="com.dataember.stash.plugin.hook.MyRepositoryHook">
+        <description>Webhook for notifying a configured endpoint of changes to this repository.</description>
+        <!--<icon>icons/example.png</icon>-->
+        <config-form name="Simple Hook Config" key="simpleHook-config">
+            <view>stash.config.example.hook.simple.formContents</view>
+            <directory location="/static/"/>
+        </config-form>
+    </repository-hook>
 </atlassian-plugin>
