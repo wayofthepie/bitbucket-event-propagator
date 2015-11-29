@@ -1,24 +1,16 @@
-package com.dataember.stash.plugin.config.ui
+package com.dataember.stash.plugin.config
 
-import java.util.Properties
-import javax.servlet.http.HttpServletRequest
-import javax.sound.sampled.UnsupportedAudioFileException
-import javax.ws.rs.core.{MediaType, Response}
-import javax.ws.rs.core.Response.Status
 import javax.ws.rs._
+import javax.ws.rs.core.{MediaType, Response}
 import javax.xml.bind.annotation.{XmlElement, XmlRootElement}
 
-import com.atlassian.bitbucket.rest.util.{RestUtils, ResourcePatterns}
+import com.atlassian.bitbucket.rest.util.RestUtils
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed
 import com.atlassian.sal.api.pluginsettings.{PluginSettings, PluginSettingsFactory}
 import com.atlassian.sal.api.transaction.{TransactionCallback, TransactionTemplate}
-import com.atlassian.sal.api.user.{UserProfile, UserManager}
+import com.atlassian.sal.api.user.UserManager
 import com.dataember.stash.plugin.msg.MessagingService
-import org.nats.Conn
-import org.slf4j.{LoggerFactory, Logger}
-import org.springframework.beans.factory.annotation.Autowired
-
-import scala.collection.JavaConverters._
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
  *

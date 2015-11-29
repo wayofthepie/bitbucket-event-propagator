@@ -8,6 +8,8 @@ import com.atlassian.sal.api.user.{UserProfile, UserManager}
 import com.atlassian.templaterenderer.TemplateRenderer
 
 /**
+  * Administration servlet for configuring the Event Propagator.
+  *
  * Created on 04/07/15.
  */
 class AdminServlet(val userManager: UserManager,
