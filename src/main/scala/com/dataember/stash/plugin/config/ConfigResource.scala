@@ -25,24 +25,34 @@ class ConfigResource(val messagingService : MessagingService,
                      val transactionTemplate: TransactionTemplate) {
 
   val logger: Logger = LoggerFactory.getLogger(classOf[ConfigResource])
-
-  val NATS_SERVERS_KEY = "servers"
   val pluginSettings: PluginSettings = pluginSettingsFactory.createGlobalSettings()
 
+  /**
+    * Respond with the exception message.
+    * @param e
+    * @return
+    */
   def errorHandler(e:Exception) = Response.serverError().entity(e.getLocalizedMessage).build()
-  def success[A](entity:Config):Response = Response.ok(entity).build()
 
+  /**
+    * HTTP 200 with the given type.
+    * @param entity
+    * @tparam A
+    * @return
+    */
+  def success[A](entity:A):Response = Response.ok(entity).build()
 
-
+  /**
+    * Retrieve The current nats connection configuration.
+    * @return
+    */
   @GET
   @Produces(Array(MediaType.APPLICATION_JSON))
-  def  get(): Response = {
-    success(transactionTemplate.execute(new TransactionCallback[Config] {
+  def getCurrentConfig(): Response = {
+    success[Config](transactionTemplate.execute(new TransactionCallback[Config] {
       override def doInTransaction(): Config = {
-
         val config: Config = new Config
-
-        Option[String](pluginSettings.get(NATS_SERVERS_KEY).asInstanceOf[String]) match {
+        Option[String](pluginSettings.get(NatsProps.NATS_SERVERS_KEY).asInstanceOf[String]) match {
           case Some(servers) =>
             config.servers = servers
             messagingService.publish("retrieved name " + " retrieved " + config.servers)
@@ -53,13 +63,18 @@ class ConfigResource(val messagingService : MessagingService,
     }))
   }
 
+  /**
+    * Update the nats connection configuration.
+    * @param config
+    * @return
+    */
   @PUT
   @Consumes(Array(MediaType.APPLICATION_JSON))
-  def put(config: Config): Response = {
+  def updateConfig(config: Config): Response = {
     transactionTemplate.execute(new TransactionCallback[Unit] {
       override def doInTransaction(): Unit= {
         val pluginSettings: PluginSettings = pluginSettingsFactory.createGlobalSettings()
-        pluginSettings.put(NATS_SERVERS_KEY, config.servers)
+        pluginSettings.put(NatsProps.NATS_SERVERS_KEY, config.servers)
         messagingService.refreshConfig()
       }
     })
@@ -67,6 +82,9 @@ class ConfigResource(val messagingService : MessagingService,
   }
 }
 
+/**
+  * Represents the nats connection configuration.
+  */
 @XmlRootElement
 class Config {
   @XmlElement

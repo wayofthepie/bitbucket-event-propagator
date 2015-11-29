@@ -14,7 +14,6 @@ class NatsMessagingService(val pluginSettingsFactory: PluginSettingsFactory) ext
   val logger: Logger = LoggerFactory.getLogger(classOf[NatsMessagingService])
 
   val NATS_SERVERS_KEY = "servers"
-  val NATS_SERVERS = "nats://192.168.1.4:4222"
 
   var conn: Option[Conn] = None
 
