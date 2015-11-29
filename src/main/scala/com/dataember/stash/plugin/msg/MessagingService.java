@@ -5,4 +5,5 @@ package com.dataember.stash.plugin.msg;
   */
 public interface MessagingService {
   void publish(String msg);
+  void refreshConfig();
 }
