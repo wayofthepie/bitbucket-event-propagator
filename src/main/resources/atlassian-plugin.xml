@@ -8,12 +8,26 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="event-propagator"/>
-    
+    <resource type="i18n" name="i18n" location="i18n/event-propagator" />
+
+
+    <component key="natsMessagingService" class="com.dataember.stash.plugin.msg.NatsMessagingService" public="true">
+        <description>Provides messaging functionality over nats.</description>
+        <interface>com.dataember.stash.plugin.msg.MessagingService</interface>
+    </component>
+
+    <!--<component-import key="messagingService" interface="com.dataember.stash.plugin.msg.MessagingService" />-->
+    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
+    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+    <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+    <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+    <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate" />
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+
     <!-- add our web resources -->
     <web-resource key="event-propagator-resources" name="event-propagator Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
+
         <resource type="download" name="event-propagator.css" location="/css/event-propagator.css"/>
         <resource type="download" name="event-propagator-admin.js" location="/js/event-propagator-admin.js"/>
         <resource type="download" name="images/" location="/images"/>
@@ -21,25 +35,39 @@
         <context>com.dataember.stash.plugin.event.propagator.admin</context>
     </web-resource>
 
-    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
-    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
-    <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
-    <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
-    <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate" />
-
-
+    <!-- Admin config interface for plugin -->
     <servlet key="admin-servlet" class="com.dataember.stash.plugin.config.AdminServlet">
         <url-pattern>/event-propagator/admin</url-pattern>
     </servlet>
 
-    <!-- create repo event listener -->
-    <component key="RepoCreateEventListener" class="com.dataember.stash.plugin.RepoCreateEventListener" />
-    <!-- import from the product container -->
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
-
-    <rest key="rest" path="/event-propagator" version="1.0">
-        <description>Provides REST resources for the admin UI.</description>
+    <!-- http://bitbucketurl/rest/event-ptopagator/latest/projects/TEST/repos/test/test -->
+    <rest key="event-propagator" path="/event-propagator" version="1.0">
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <init-param>
+            <param-name>extension.filter.excludes</param-name>
+            <param-value>.*</param-value>
+        </init-param>
+        <package>com.dataember.stash.plugin.config.ui</package>
     </rest>
 
+    <web-item key="event-propagator_config" name="Event Propagator Config"
+              section="atl.admin/admin-settings-section">
 
+        <description>Configuration for the Event Propagator</description>
+        <label>Event Propagator Configuration</label>
+        <link linkId="event-propagator-config">/plugins/servlet/event-propagator/admin</link>
+    </web-item>
+    <!-- End Admin config interface -->
+
+    <!-- Repo hook config -->
+    <repository-hook key="examplehook" name="Event Propagator" class="com.dataember.stash.plugin.hook.MyRepositoryHook">
+        <description>Webhook for notifying a configured endpoint of changes to this repository.</description>
+        <icon>icons/example.png</icon>
+        <config-form name="Simple Hook Config" key="simpleHook-config">
+            <view>bitbucket.config.example.hook.simple.formContents</view>
+            <directory location="/static/"/>
+        </config-form>
+    </repository-hook>
+    <!-- End Repo hook config -->
 </atlassian-plugin>
