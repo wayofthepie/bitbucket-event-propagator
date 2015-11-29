@@ -8,12 +8,8 @@
   <body>
     <form id="admin" class="aui">
       <div class="field-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" class="text">
-       </div>
-       <div class="field-group">
-         <label for="time">Time:</label>
-         <input type="text" id="time" name="time" class="text">
+        <label for="servers">Servers:</label>
+        <input type="text" id="servers" name="servers" class="text">
        </div>
        <div class="field-group">
          <input type="submit" value="Save" class="button">

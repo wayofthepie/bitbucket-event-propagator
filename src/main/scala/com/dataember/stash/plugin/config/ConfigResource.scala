@@ -11,11 +11,12 @@ import com.atlassian.sal.api.transaction.{TransactionCallback, TransactionTempla
 import com.atlassian.sal.api.user.UserManager
 import com.dataember.stash.plugin.msg.MessagingService
 import org.slf4j.{Logger, LoggerFactory}
+import org.springframework.web.bind.annotation.{RequestMethod, RequestMapping}
 
 /**
  *
  */
-@Path("/")
+@Path("/configuration")
 @Consumes(Array({MediaType.APPLICATION_JSON}))
 @Produces(Array({RestUtils.APPLICATION_JSON_UTF8}))
 @AnonymousAllowed
@@ -48,7 +49,7 @@ class ConfigResource(val messagingService : MessagingService,
     */
   @GET
   @Produces(Array(MediaType.APPLICATION_JSON))
-  def getCurrentConfig(): Response = {
+  def currentConfig(): Response = {
     success[Config](transactionTemplate.execute(new TransactionCallback[Config] {
       override def doInTransaction(): Config = {
         val config: Config = new Config
